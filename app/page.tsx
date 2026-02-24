@@ -3,10 +3,11 @@
 import { useState } from "react";
 
 const CREATOR_FORM = "https://forms.gle/aGWAxcfo3DeQbyo79";
-const BRAND_LINK = "#"; // brand form link yahan daalna
+const BRAND_LINK = "https://forms.gle/oGAXo96UNhQzM8hD9"; // brand form link yahan daalna
 
 export default function GoatScalePage() {
   const [activeTab, setActiveTab] = useState<"creators" | "brands">("creators");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <main
@@ -210,10 +211,141 @@ export default function GoatScalePage() {
           grid-template-columns: 1fr 1fr;
           gap: 20px;
         }
-        @media (max-width: 640px) {
+
+        /* ===== HAMBURGER ===== */
+        .hamburger {
+          display: none;
+          flex-direction: column;
+          gap: 5px;
+          cursor: pointer;
+          background: none;
+          border: none;
+          padding: 6px;
+          z-index: 200;
+        }
+        .hamburger span {
+          display: block;
+          width: 24px;
+          height: 2.5px;
+          background: #ffd200;
+          border-radius: 4px;
+          transition: all 0.3s ease;
+          transform-origin: center;
+        }
+        .hamburger.open span:nth-child(1) {
+          transform: translateY(7.5px) rotate(45deg);
+        }
+        .hamburger.open span:nth-child(2) {
+          opacity: 0;
+          transform: scaleX(0);
+        }
+        .hamburger.open span:nth-child(3) {
+          transform: translateY(-7.5px) rotate(-45deg);
+        }
+
+        .mobile-menu {
+          display: none;
+          position: fixed;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(10,10,10,0.97);
+          z-index: 150;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 24px;
+          backdrop-filter: blur(16px);
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+          font-family: 'Syne', sans-serif;
+          font-weight: 700;
+          font-size: 28px;
+          color: #fff;
+          text-decoration: none;
+          letter-spacing: -0.02em;
+          transition: color 0.2s;
+        }
+        .mobile-menu a:hover { color: #ffd200; }
+        .mobile-menu .menu-divider {
+          width: 40px; height: 2px;
+          background: #ffd200;
+          border-radius: 2px;
+          opacity: 0.4;
+        }
+        .mobile-menu .menu-cta {
+          margin-top: 16px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+          width: 260px;
+        }
+        .mobile-menu .menu-cta a {
+          font-size: 16px !important;
+          width: 100%;
+          text-align: center;
+          padding: 14px 0;
+        }
+
+        @media (max-width: 768px) {
+          .nav-desktop-btns { display: none !important; }
+          .hamburger { display: flex !important; }
+        }
+        @media (max-width: 768px) {
+          nav { padding: 14px 18px; }
+          .nav-btn-sm { padding: 8px 14px !important; font-size: 12px !important; }
+
+          section { padding: 52px 18px; }
+
           .grid-2 { grid-template-columns: 1fr; }
-          nav { padding: 16px 20px; }
-          section { padding: 60px 20px; }
+
+          .hero-section { padding-top: 56px !important; padding-bottom: 56px !important; }
+
+          .hero-btns {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 12px !important;
+          }
+          .hero-btns a {
+            text-align: center !important;
+            width: 100% !important;
+          }
+
+          .stats-row {
+            gap: 20px !important;
+            justify-content: space-around !important;
+          }
+          .stat-num { font-size: 26px !important; }
+
+          .card { padding: 18px !important; }
+
+          .tab-btn {
+            padding: 10px 16px !important;
+            font-size: 13px !important;
+            flex: 1 !important;
+          }
+
+          .cta-box {
+            padding: 36px 18px !important;
+            border-radius: 16px !important;
+          }
+          .cta-btns {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 12px !important;
+          }
+          .cta-btns a { text-align: center !important; width: 100% !important; }
+
+          footer {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            padding: 24px 18px !important;
+            gap: 14px !important;
+          }
+        }
+
+        @media (max-width: 400px) {
+          .stats-row { flex-direction: column; align-items: flex-start !important; gap: 16px !important; }
         }
 
         .cta-box {
@@ -253,23 +385,55 @@ export default function GoatScalePage() {
         .stat-label { font-size: 14px; color: #666; margin-top: 4px; }
       `}</style>
 
+      {/* MOBILE MENU OVERLAY */}
+      <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+        {/* Close button */}
+        <button
+          className={`hamburger open`}
+          onClick={() => setMenuOpen(false)}
+          style={{ position: "absolute", top: 20, right: 20 }}
+        >
+          <span /><span /><span />
+        </button>
+        <a href="#how" onClick={() => setMenuOpen(false)}>How It Works</a>
+        <div className="menu-divider" />
+        <a href="#why" onClick={() => setMenuOpen(false)}>Why GOATSCALE</a>
+        <div className="menu-cta">
+          <a href={CREATOR_FORM} target="_blank" rel="noreferrer" className="btn-primary" onClick={() => setMenuOpen(false)}>
+            Join as Creator →
+          </a>
+          <a href={BRAND_LINK} className="btn-outline" onClick={() => setMenuOpen(false)}>
+            Partner as Brand →
+          </a>
+        </div>
+      </div>
+
       {/* NAV */}
       <nav className="fade-up">
         <div className="logo">
           GOAT<span className="yellow">SCALE</span>
         </div>
-        <div style={{ display: "flex", gap: 12 }}>
-          <a href={BRAND_LINK} className="btn-outline" style={{ padding: "10px 22px", fontSize: 14 }}>
+        {/* Desktop buttons */}
+        <div className="nav-desktop-btns" style={{ display: "flex", gap: 12 }}>
+          <a href={CREATOR_FORM} target="_blank" rel="noreferrer" className="btn-outline nav-btn-sm" style={{ padding: "10px 22px", fontSize: 14 }}>
             Creators
           </a>
-          <a href={CREATOR_FORM} target="_blank" rel="noreferrer" className="btn-primary" style={{ padding: "10px 22px", fontSize: 14 }}>
+          <a href={BRAND_LINK} className="btn-primary nav-btn-sm" style={{ padding: "10px 22px", fontSize: 14 }}>
             Brands
           </a>
         </div>
+        {/* Hamburger - mobile only */}
+        <button
+          className={`hamburger ${menuOpen ? "open" : ""}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span /><span /><span />
+        </button>
       </nav>
 
       {/* HERO */}
-      <section style={{ paddingTop: 96, paddingBottom: 96, textAlign: "center" }}>
+      <section className="hero-section" style={{ paddingTop: 96, paddingBottom: 96, textAlign: "center" }}>
         <div className="container">
           <div className="hero-badge fade-up">
             <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ffd200", display: "inline-block" }} />
@@ -295,7 +459,7 @@ export default function GoatScalePage() {
           >
             GOATSCALE connects ambitious brands with authentic creators to drive real growth — fast, measurable, and built to scale.
           </p>
-          <div className="fade-up delay-3" style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+          <div className="fade-up delay-3 hero-btns" style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <a href={CREATOR_FORM} target="_blank" rel="noreferrer" className="btn-primary">
               I&apos;m a Creator →
             </a>
@@ -304,7 +468,7 @@ export default function GoatScalePage() {
             </a>
           </div>
 
-          <div className="stats-row fade-up delay-4" style={{ justifyContent: "center" }}>
+             <div className="stats-row fade-up delay-4" style={{ justifyContent: "center", alignItems: "center" }}>
             {[
               { num: "500+", label: "Verified Creators" },
               { num: "3x", label: "Avg. ROI for Brands" },
@@ -322,20 +486,18 @@ export default function GoatScalePage() {
       <div className="divider" />
 
       {/* HOW IT WORKS */}
-      <section>
+      <section id="how">
         <div className="container">
           <div className="section-label">Process</div>
           <h2 className="section-title">How GOATSCALE Works</h2>
           <p style={{ color: "#666", marginBottom: 48, fontFamily: "'DM Sans', sans-serif", fontSize: 16, maxWidth: 480 }}>
-            A simple, powerful process to connect the right creators with the right brands.
+            Two simple steps — that's all it takes to get started with GOATSCALE.
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {[
-              { n: "1", title: "Sign Up", desc: "Create your profile as a creator or brand in under 5 minutes. Tell us your niche, goals, and what you're looking for." },
-              { n: "2", title: "Get Matched", desc: "Our algorithm surfaces the best-fit partnerships. No cold DMs, no guesswork — just quality matches." },
-              { n: "3", title: "Collaborate", desc: "Connect, negotiate, and launch campaigns directly on the platform with full support from our team." },
-              { n: "4", title: "Scale", desc: "Track performance, iterate, and build long-term partnerships that compound your growth over time." },
+              { n: "1", title: "Fill the Form", desc: "Whether you're a Brand or a Creator — fill out the form above. Tell us who you are, what you do, and what you're looking for. Takes less than 2 minutes." },
+              { n: "2", title: "Wait for Our Response", desc: "Once you submit, our team will review your profile and get back to you shortly. Sit tight — we'll reach out with next steps!" },
             ].map((step) => (
               <div key={step.n} className="card" style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
                 <div className="step-circle">{step.n}</div>
@@ -356,7 +518,7 @@ export default function GoatScalePage() {
       <div className="divider" />
 
       {/* WHY GOATSCALE — Tabs */}
-      <section>
+      <section id="why">
         <div className="container">
           <div className="section-label">Why Us</div>
           <h2 className="section-title">Why GOATSCALE?</h2>
@@ -365,7 +527,7 @@ export default function GoatScalePage() {
           </p>
 
           {/* Tab Switch */}
-          <div style={{ display: "flex", gap: 12, marginBottom: 36 }}>
+          <div className="tabs-row" style={{ display: "flex", gap: 12, marginBottom: 36 }}>
             <button className={`tab-btn ${activeTab === "creators" ? "tab-active" : "tab-inactive"}`} onClick={() => setActiveTab("creators")}>
               For Creators
             </button>
@@ -454,7 +616,7 @@ export default function GoatScalePage() {
             <p style={{ fontFamily: "'DM Sans', sans-serif", color: "#888", fontSize: 16, marginBottom: 36, maxWidth: 420, margin: "0 auto 36px" }}>
               Whether you&apos;re a creator or a brand, your next big collab starts here. Join free today.
             </p>
-            <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+            <div className="cta-btns" style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
               <a href={CREATOR_FORM} target="_blank" rel="noreferrer" className="btn-primary">
                 Join as Creator
               </a>
